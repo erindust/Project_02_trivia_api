@@ -56,7 +56,7 @@ def create_app(test_config=None):
 
 
   '''
-  @TODO: 
+  9/10/2023 DONE @TODO: 
   Create an endpoint to handle GET requests for questions, 
   including pagination (every 10 questions). 
   This endpoint should return a list of questions, 
@@ -87,7 +87,7 @@ def create_app(test_config=None):
     return jsonify(
       {
         "success":True,
-        "questions":current_questions,
+        "questions":current_questions ,
         "total_questions":len(Question.query.all())
       }
     )
