@@ -37,8 +37,14 @@ To run the server, execute:
 ```bash
 flask run --reload
 ```
-
 The `--reload` flag will detect file changes and restart the server automatically.
+
+### EGN - I run this while in the backend directory like this... in command prompt 
+-- do one time during development session - you will need to do eash time you restart you environment:
+    > set FLASKAPP=flaskr
+    > set FLASK_ENV=development
+-- to start the server:
+    > py -3.7 -m flask run --reload
 
 ## ToDo Tasks
 These are the files you'd want to edit in the backend:
