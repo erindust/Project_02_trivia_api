@@ -108,6 +108,7 @@ def create_app(test_config=None):
   def delete_question(question_id):
     try:
       question = Question.query.filter(Question.id==question_id).one_or_none()
+      print(question)
       if question == None:
         abort(404)
 
@@ -117,6 +118,7 @@ def create_app(test_config=None):
 
       return jsonify(
         {
+
           "success":True,
           "deleted":question_id,
           "questions":current_questions,
