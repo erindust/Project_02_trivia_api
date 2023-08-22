@@ -92,7 +92,38 @@ def create_app(test_config=None):
       }
     )
 
+  # Test endpoirt
+  @app.route("/")
+  def generic_endpoint():
+    return jsonify(
+        {
+          "success":True,
+        }
+      )
 
+  @app.route("/questions/<int:question_id>", methods=["GET"])
+  def get_question(question_id):
+    try:  
+      question = Question.query.filter(Question.id==question_id).one_or_none()
+      print(question)
+      if question == None:
+        abort(404)
+
+      question.delete()
+      selection = Question.query.order_by(Question.id).all()
+      current_questions = paginate_questions(request,selection)
+
+      return jsonify(
+        {
+
+          "success":True,
+          "deleted":question_id,
+          "questions":current_questions,
+          "total_questions":len(Question.query_all())
+        }
+      )
+    except:
+      abort(422)
 
 
   '''

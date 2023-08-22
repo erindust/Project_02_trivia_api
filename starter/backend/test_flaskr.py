@@ -34,16 +34,28 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
+    def test_generic(self):
+        res = self.client().get("/")
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code,200)
+        self.assertEqual(data['success'],True)
+
+    def test_access_get_a_record(self):
+        question_id = 2
+        res = self.client().get("/"+ str(question_id))
+        data = json.loads(res.data)
+        question = Question.query.filter(Question.id == question_id).one_or_none() 
+
     def test_delete_question(self):
         question_id = 2
         res = self.client().delete('/questions/'+str(question_id))
-        data = json.loads(res.data)
+        data = json.loads(res.data).decode('utf-8')
         print(data)
 
         question = Question.query.filter(Question.id == question_id).one_or_none()
 
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['susccess'],True)
+        self.assertEqual(data['success'],True)
         self.assertEqual(data['deleted'],question_id)
         self.assertTrue(data['total_questions'])
         self.assertTrue(data[len(data['questions'])])
