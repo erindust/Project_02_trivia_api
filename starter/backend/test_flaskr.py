@@ -48,7 +48,7 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_delete_question(self):
         question_id = 2
-        res = self.client().delete('/questions/'+str(question_id))
+        res = self.client().delete("/questions/"+str(question_id))
         data = json.loads(res.data).decode('utf-8')
         print(data)
 
@@ -60,6 +60,15 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
         self.assertTrue(data[len(data['questions'])])
         self.assertEqual(question,None)
+
+    def test_retrieve_questions(self):
+        res = self.client().get('/questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code,200)
+        self.assertEqual(data['success'],True)
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data['questions']))
 
 
 # Make the tests conveniently executable
