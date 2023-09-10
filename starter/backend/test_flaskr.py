@@ -41,25 +41,31 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'],True)
 
     def test_access_get_a_record(self):
-        question_id = 2
-        res = self.client().get("/"+ str(question_id))
+        question_id = 10
+        res = self.client().get("/questions/"+ str(question_id))
         data = json.loads(res.data)
         question = Question.query.filter(Question.id == question_id).one_or_none() 
+        
+        self.assertEqual(res.status_code,200)
+        self.assertEqual(data['success'],True)
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(data[len(data['questions'])])
+
 
     def test_delete_question(self):
-        question_id = 2
+        question_id = 6
         res = self.client().delete("/questions/"+str(question_id))
         data = json.loads(res.data).decode('utf-8')
         print(data)
 
-        question = Question.query.filter(Question.id == question_id).one_or_none()
+        # question = Question.query.filter(Question.id == question_id).one_or_none()
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'],True)
         self.assertEqual(data['deleted'],question_id)
         self.assertTrue(data['total_questions'])
         self.assertTrue(data[len(data['questions'])])
-        self.assertEqual(question,None)
+        self.assertEqual(data['question'],None)
 
     def test_retrieve_questions(self):
         res = self.client().get('/questions')

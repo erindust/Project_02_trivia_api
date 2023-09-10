@@ -153,7 +153,8 @@ def create_app(test_config=None):
           "success":True,
           "deleted":question_id,
           "questions":current_questions,
-          "total_questions":len(Question.query_all())
+          "total_questions":len(Question.query_all()),
+          "question":Question.query.filter(Question.id==question_id).one_or_none()
         }
       )
     except:
