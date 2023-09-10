@@ -109,17 +109,17 @@ def create_app(test_config=None):
       if question == None:
         abort(404)
 
-      question.delete()
       selection = Question.query.order_by(Question.id).all()
+      print(selection)
       current_questions = paginate_questions(request,selection)
-
+      # questions = [question.format() for question in selection]
+      # print(questions)
       return jsonify(
         {
 
           "success":True,
-          "deleted":question_id,
           "questions":current_questions,
-          "total_questions":len(Question.query_all())
+          "total_questions":len(selection)
         }
       )
     except:
@@ -153,7 +153,7 @@ def create_app(test_config=None):
           "success":True,
           "deleted":question_id,
           "questions":current_questions,
-          "total_questions":len(Question.query_all()),
+          "total_questions":len(Question.query.all()),
           "question":Question.query.filter(Question.id==question_id).one_or_none()
         }
       )

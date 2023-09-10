@@ -41,30 +41,30 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'],True)
 
     def test_access_get_a_record(self):
-        question_id = 10
+        question_id = 11
         res = self.client().get("/questions/"+ str(question_id))
         data = json.loads(res.data)
-        question = Question.query.filter(Question.id == question_id).one_or_none() 
-        
+        # question = Question.query.filter(Question.id == question_id).one_or_none() 
+        print(len(data['questions']))
         self.assertEqual(res.status_code,200)
         self.assertEqual(data['success'],True)
         self.assertTrue(data['total_questions'])
-        self.assertTrue(data[len(data['questions'])])
+        self.assertTrue(len(data['questions']))
 
 
     def test_delete_question(self):
-        question_id = 6
+        question_id = 18
         res = self.client().delete("/questions/"+str(question_id))
-        data = json.loads(res.data).decode('utf-8')
+        data = json.loads(res.data)
         print(data)
-
-        # question = Question.query.filter(Question.id == question_id).one_or_none()
-
+        print(data['questions'])
+        question = Question.query.filter(Question.id == question_id).one_or_none()
+        print(question)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'],True)
         self.assertEqual(data['deleted'],question_id)
         self.assertTrue(data['total_questions'])
-        self.assertTrue(data[len(data['questions'])])
+        self.assertTrue(len(data['questions']))
         self.assertEqual(data['question'],None)
 
     def test_retrieve_questions(self):
