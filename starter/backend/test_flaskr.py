@@ -19,6 +19,8 @@ class TriviaTestCase(unittest.TestCase):
         self.database_path = "postgresql://{}:{}@{}/{}".format("postgres", "postgres",'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
+        self.new_question = {"question":"The Question 1","answer":"The Answer 1","difficulty":1,"category":1}
+
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -75,6 +77,11 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'],True)
         self.assertTrue(data['total_questions'])
         self.assertTrue(len(data['questions']))
+
+    def test_create_new_question(self):
+        res = self.client().post("/questions",json=self.new_question)
+        data = json.loads(res.data)
+        
 
 
 # Make the tests conveniently executable

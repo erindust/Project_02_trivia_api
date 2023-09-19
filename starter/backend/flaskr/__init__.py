@@ -134,6 +134,7 @@ def create_app(test_config=None):
   This removal will persist in the database and when you refresh the page. 
 
   8/12/2023 Need to figure out how to test this.
+  9/12/2023 DONE
   '''
   @app.route("/questions/<int:question_id>", methods=["DELETE"])
   def delete_question(question_id):
@@ -172,6 +173,33 @@ def create_app(test_config=None):
   the form will clear and the question will appear at the end of the last page
   of the questions list in the "List" tab.  
   '''
+  @app.route("/questions", methods=["POST"])
+  def create_question():
+    body = request.get_json()
+
+    new_question = body.get("question",None)
+    new_answer = body.get("answer",None)
+    new_difficulty = body.get("difficulty",None)
+    new_category = body.get("category",None)
+
+    try:
+      question = Question(question=new_question, answer=new_answer,difficulty=new_difficulty,catagory=new_category)
+      question.insert()
+
+      selection = Question.query.order_by(Question.id).all()
+      current_books = paginate_books(request,selection)
+
+      return jsonify(
+        {
+          "success":True,
+          "created":question.id,
+          "questions":current_questions,
+          "total_questions":len(Book.query.all())
+        }
+      )
+    except:
+      abort(422)
+
 
   '''
   @TODO: 
@@ -211,6 +239,27 @@ def create_app(test_config=None):
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
+  @app.errorhandler(404)
+  def not_found(error):
+    return (
+      jsonify({"success":False, "error":404, "message":"resource not found"}),
+      404
+    )
+
+  @app.errorhandler(422)
+  def unprocessable(error):
+    return (
+        jsonify({"success": False, "error": 422, "message": "unprocessable"}),
+        422,
+    )
+
+  @app.errorhandler(400)
+  def bad_request(error):
+    return (
+      jsonify({"success": False, "error": 400, "message": "bad request"}), 
+      400
+    )
+
   
   return app
 
