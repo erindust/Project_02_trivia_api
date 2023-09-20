@@ -187,14 +187,14 @@ def create_app(test_config=None):
       question.insert()
 
       selection = Question.query.order_by(Question.id).all()
-      current_books = paginate_books(request,selection)
+      current_questions = paginate_questions(request,selection)
 
       return jsonify(
         {
           "success":True,
           "created":question.id,
           "questions":current_questions,
-          "total_questions":len(Book.query.all())
+          "total_questions":len(Question.query.all())
         }
       )
     except:
@@ -211,6 +211,26 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+  @app.route("/questions/search",methods=["POST"])
+  def search_questions():
+    body = requestion.get_json()
+    searchPhrase = body.get("searchTerm",None)
+
+    if searchPhase == None:
+      abort(404)
+
+    searchResults = Question.query.filter(Question.question.ilike(str(searchPhrase))).all()
+
+    return jsonify({
+        'success': True,
+        'questions': [question.format() for question in searchResults],
+        'total_questions': len(searchResults),
+        'current_category': None
+    })
+
+
+
+
 
   '''
   @TODO: 
