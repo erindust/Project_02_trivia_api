@@ -213,10 +213,10 @@ def create_app(test_config=None):
   '''
   @app.route("/questions/search",methods=["POST"])
   def search_questions():
-    body = requestion.get_json()
+    body = request.get_json()
     searchPhrase = body.get("searchTerm",None)
 
-    if searchPhase == None:
+    if searchPhrase == None:
       abort(404)
 
     searchResults = Question.query.filter(Question.question.ilike(str(searchPhrase))).all()
@@ -230,8 +230,6 @@ def create_app(test_config=None):
 
 
 
-
-
   '''
   @TODO: 
   Create a GET endpoint to get questions based on category. 
@@ -240,6 +238,20 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
+  @app.route("/categories/<int:category_id>/questions",methods=["GET"])
+  def getQuestionsPerCategory(category_id):
+
+    questions = Question.query.filter(Question.catagory == str(category_id)).all()
+
+    if questions == None:
+      abort(404)
+
+    return jsonify({
+      "success":True,
+      "questions":[question.format() for question in questions],
+      "total_questions":len(questions),
+      "current_category":category_id
+    })
 
 
   '''
@@ -253,6 +265,10 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+  
+
+
+
 
   '''
   @TODO: 
