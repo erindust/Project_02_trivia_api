@@ -265,9 +265,45 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
-  
+  # @app.route("/category/<int:category_id>/questions",methods=["POST"])
+  # def play(category_id):
+  #   questions = Question.query.filter(Questions.category == str(category_id)).all()
+  #   if questions == None:
+  #     abort(404)
+
+  #   return jsonify({
+  #     "success":True,
+  #     "questions":[question.format() for question in questions],
+  #     "total_questions":len(questions),
+  #     "current_category":category_id
+  #   })
+
+  @app.route("/quizzes", methods=["POST"])
+  def getTriviaQuestions():
+    data = request.get_json()
+
+    if data == None:
+      abort(404)
+
+    previous_questions = data["previous_questions"]
+    category_id = data["quiz_catagory"]
+
+    
 
 
+
+    return jsonify({
+      "id":question_id,
+      "question":question,
+      "answer":answer,
+      "difficult":difficulty,
+      "category":category_id
+
+    })
+
+    
+
+    
 
 
   '''
