@@ -288,7 +288,20 @@ def create_app(test_config=None):
     previous_questions = data["previous_questions"]
     category_id = data["quiz_catagory"]
 
-    
+    questions = Question.query.filter(Question.catagory == str(category_id)).all()
+    questions_not_used = []
+    for i in questions:
+      # get all of the questions not used
+      if i.id in previous_questions == False:
+        questions_not_used.append(i.id)
+
+    picked_question_index = random.randint(0,len(questions_not_used))
+
+
+    return jsonify({
+      "success": True,
+      "id":questions_not_used(picked_question_index)
+    })
 
 
 

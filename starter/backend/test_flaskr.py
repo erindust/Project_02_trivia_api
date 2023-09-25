@@ -82,6 +82,8 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().post("/questions",json=self.new_question)
         data = json.loads(res.data)
         
+        
+    def test_the_
 
 
 # Make the tests conveniently executable
